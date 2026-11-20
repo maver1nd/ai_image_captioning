@@ -1,0 +1,95 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Image Captioning System</title>
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <header>
+            <h1>AI Image Captioning</h1>
+            <p>Upload an image and let Gemini AI understand and describe what's inside.</p>
+        </header>
+
+        <main class="card">
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="upload-box">
+
+                    <div class="upload-icon">📸</div>
+
+                    <h2>Upload Your Image</h2>
+
+                    <p>Select an image from your device (JPG, PNG, WebP, etc.)</p>
+
+                    <input
+                        type="file"
+                        name="image"
+                        id="imageInput"
+                        accept="image/*"
+                        required
+                    >
+
+                    <button type="submit" id="submitBtn">
+                        Generate Caption
+                    </button>
+
+                </div>
+            </form>
+
+            {% if error %}
+                <div class="error-box">
+                    <strong>⚠️ Error:</strong> {{ error }}
+                </div>
+            {% endif %}
+
+            {% if uploaded_image and not error %}
+
+                <div class="result">
+
+                    <h2>Your Uploaded Image</h2>
+
+                    <img
+                        src="{{ uploaded_image }}"
+                        alt="Uploaded Image"
+                        class="uploaded-image"
+                    >
+
+                    <div class="caption-box">
+
+                        <h3>AI Generated Caption</h3>
+
+                        <p>{{ caption }}</p>
+
+                        <div class="confidence">
+                            Match Rate / Confidence: <span>{{ similarity }}%</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        </main>
+
+
+        <footer>
+            <p>Powered by Google Gemini 3.5 Flash</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
